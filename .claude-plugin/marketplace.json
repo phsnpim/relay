@@ -1,0 +1,11 @@
+{
+  "name": "relay",
+  "owner": { "name": "phsnpim" },
+  "plugins": [
+    {
+      "name": "relay",
+      "source": "./",
+      "description": "UI handoff boards in Figma: behavior, rules, states, flows, edge cases and messages that Dev Mode can't show."
+    }
+  ]
+}

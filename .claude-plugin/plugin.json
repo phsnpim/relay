@@ -1,0 +1,7 @@
+{
+  "name": "relay",
+  "version": "5.2.0",
+  "description": "UI handoff boards in Figma: behavior, rules, states, flows, edge cases and messages that Dev Mode can't show.",
+  "author": { "name": "phsnpim" },
+  "repository": "https://github.com/phsnpim/relay"
+}
