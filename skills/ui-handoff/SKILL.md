@@ -479,15 +479,28 @@ Name each board frame `0# Page type — {Screen name}`.
 - **Flow node component**, variant `type = screen | overlay | decision | error | terminal`:
   - **Screen:** vertical auto layout, 1.5px ink stroke, radius 12, Clip content → dark header 44 (screen name) → preview area (fill `#F1F1F4`, padding 24, holds the master instance at 100%; node width = screen width + 48) → 1px divider → footer (Geist Mono 13 muted, padding 12/24) for the sub-line in words (`Empty queue → back to list`). The sub-line never sits inside the preview area.
   - **Overlay:** same as Screen, with a surface tag (`🪟 MODAL`, `✉️ EMAIL`, `🌐 BROWSER`…, light pill, §4) in the ink header and its host screen scrimmed in the preview. Name its message title in the footer when it has one.
-  - **Decision:** diamond, fill `#F3EEFF`, accent stroke. Decisions are the only accent shapes in the flow.
+  - **Decision:** diamond, fill `#F3EEFF`, accent stroke, the question in a few words (`Valid?`). **At most 3 exits, every exit labelled** (`YES`, `NO`, or the outcome); by convention yes leaves to the right, no below. More than 3 outcomes → split into two decisions. Decisions are the only accent shapes in the flow.
+  - **Merge:** a small ink dot (8px) where branches rejoin before the next node, so two arrows never land on one point.
   - **Error:** white, `#B42318` dashed stroke (dash 5, gap 4). Footer names the message it shows.
   - **Terminal:** pill; Start = ink outline, End = ink fill. Only for the no-screen cases above.
 - **Arrows start at the trigger.** Every arrow caused by a user action leaves from the marker of the element that causes it, drawn on the source screen's preview (marker `2` on the `Next` button), not from the node's edge. This includes arrows into a decision (`Next` → "valid?") and return paths (`Back`). Draw the arrow's first segment above the node so it visibly touches the marker. Only arrows out of a decision, or caused by the system, leave from a shape's edge.
 - **Nodes are as big as the screen.** Every Screen / Overlay node holds its master at 100%, so a page node is ~1330 wide and a modal node ~570. The board grows to fit (Hug). Plugin API: a nested instance inside a kit Flow node can't be resized, so detach the node, swap its preview slot for the master, and set the node width to the screen width + 48.
-- **Arrows:** vector lines, 1.5px stroke `#6B6B6B`, arrow end cap, corner radius 8 on elbows. Orthogonal only, no diagonals. Main path on one horizontal axis; errors drop straight down from decisions; return paths dashed muted. Keep arrows on a layer below the nodes.
-- **Arrow labels:** Geist Mono 13 uppercase, on a small frame filled white (the board color) so it masks the line, 6–10px from the stroke, in open space between nodes. Gaps between nodes ≥ 80px. Label = trigger + navigation type when it isn't the same page: `CLICK NEXT · NEW TAB`, `SUBMIT · MODAL`, `BACK`, `EXTERNAL`.
-- **State diagram variant** (state layout): nodes are statuses (Screen node type with the status screen inside, titled by the status label), arrows are transitions labelled `{trigger} · {takes effect}` in words (e.g. `DEACTIVATE · NEXT DAY`). Cancel-request arrows are dashed and return to the previous status. Time windows show as a small muted tag on the arrow they block (`23:50–24:00`).
-- Legend: a horizontal strip at the bottom with a hairline above it. Include the navigation-type labels used on the board.
+- **Arrows:** vector lines, 1.5px stroke `#6B6B6B`, arrow end cap. Main path on one horizontal axis; errors drop straight down from decisions; return paths dashed muted (dash 5, gap 4). Keep arrows on a layer below the nodes.
+- **Connector rules (from diagram-design; every flow and state board):**
+  1. **Orthogonal only, rounded elbows.** Every bend is a right angle with corner radius 8. No diagonals. An arrow leaves and enters a node perpendicular to the edge it touches, at least 8px from a corner, never sliding along a border.
+  2. **Labels never touch their arrow.** A visible 6–10px gap between the label frame and the stroke; beside the line on vertical segments.
+  3. **No stacked arrows.** Two arrows never share a path: keep parallel routes 12px or more apart. Where two must cross, add a small hop (a 6px arc) on one so each stays traceable.
+  4. **One attach point per arrow.** Several arrows on the same node edge get their own points, spread evenly, 12px or more apart.
+  5. **No arrow behind a node that isn't its start or end.** Reroute around it. Only when no other route exists: dashed, label at the visible end, and no arrowhead on the node it passes.
+  6. **Labels sit in open space.** A label frame never overlaps any node, only the board.
+  - **Check by script, not by eye.** Walk the board: flag any arrow segment that isn't horizontal or vertical, any two segments that overlap, any label frame that intersects a node or touches its stroke, and any two arrow ends on the same point. Fix every hit and re-run.
+- **Arrow labels:** Geist Mono 13 uppercase, short (about 14 characters; `NEXT · MODAL`, `SUBMIT`, `BACK`, `EXTERNAL`), on a small frame filled white (the board color) so it masks the line, centred on its segment, in open space between nodes. Gaps between nodes ≥ 80px. Add the navigation type when it isn't the same page: `· NEW TAB`, `· MODAL`. Never vertical text.
+- **State diagram variant** (state layout): nodes are statuses (Screen node type with the status screen inside, titled by the status label). Arrows are transitions labelled `{trigger} [{condition}] · {takes effect}` in words, leaving out parts the source doesn't have (e.g. `DEACTIVATE · NEXT DAY`, `APPROVE [ADMIN]`). Cancel-request arrows are dashed and return to the previous status. Time windows show as a small muted tag on the arrow they block (`23:50–24:00`).
+  - **Start and end:** a small filled ink dot before the first status; a ringed dot after a final status. Self-loops (an action that keeps the status) curve above the node.
+  - **"From any status" is one note, not many arrows:** e.g. `Any status → Suspended on fraud flag`, as a muted tag near the Suspended node.
+  - **Lifecycle layout** when one record moves through 4–5 main statuses and its waits, retries and endings matter as much as the happy path: main statuses left → right on one row; waiting or pending statuses in a band below; final outcomes (cancelled, failed, closed) in their own band at the end, each its own node. At most 9 statuses and 10 transitions; past that, split the overview from the detailed rules.
+  - More transitions than twice the number of statuses → it's two flows; split them.
+- Legend: a horizontal strip at the bottom with a hairline above it, never inside the flow. It covers every node type, line style and navigation label used on the board, and nothing else.
 
 ## 7. Keeping it in sync
 
@@ -524,6 +537,8 @@ Name each board frame `0# Page type — {Screen name}`.
   - [ ] Flow starts on the entry page (real instance) with a marker on the trigger; file searched for it, or the user asked
   - [ ] Flow ends on the screen the user lands on; no text-only Start / End pills when a screen exists
   - [ ] Every user-action arrow visibly starts at its trigger marker, and names the navigation type when it isn't the same page
+  - [ ] Flow and state boards pass the connector rules (§6): orthogonal with rounded elbows, no stacked or shared arrows, a hop at each crossing, no arrow behind a node it doesn't connect, labels 6–10px off their line and clear of every node
+  - [ ] Every decision has 3 exits or fewer, each labelled; every state transition is labelled with its trigger
   - [ ] Placeholder stripes reach all four corners (none half-white)
   - [ ] Cards on every board sit in one row, none wrapped; board width hugs
   - [ ] On wide boards, tables, strips, and Open questions stay 1680 wide, left-aligned
@@ -622,6 +637,7 @@ Name each board frame `0# Page type — {Screen name}`.
 - Start a flow with a pill that names a button ("Add …") when the page with that button exists. Start on that page.
 - End a flow with a text pill when the user lands on a real screen.
 - Cramp flow nodes when the board has room.
+- Draw diagonal arrows, let two arrows share a path or an attach point, or run an arrow behind a node it doesn't connect.
 - Draw flow arrows from a screen's edge when a specific button triggers them, or omit `NEW TAB` / `MODAL` when navigation isn't same-page.
 - Spec what Dev Mode already shows (spacing, size, color, tokens, props).
 - Add side notes or meta lines next to board titles.
