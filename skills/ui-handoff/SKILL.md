@@ -1,8 +1,8 @@
 ---
 name: ui-handoff
-description: Use when the user asks to create, update, or review UI handoff / dev handoff / spec boards in Figma (contents, scope with new/changed spotlights, screen spec, variant × state matrix, component states, user flow, responsive breakpoints, edge cases, field validation, error and message catalog, status lifecycle, changelog) for frontend, mobile, or QA. Also use when the user wants CTA enable/disable rules, form validation rules, error messages, toasts, search / filter / sort rules, or entity statuses documented for developers. Works in any project: it adapts to the product's platform (responsive web, desktop app, mobile app, tablet), breakpoints, note language, fonts, and brand colours. Builds style-E boards that document behavior, rules, and conditions only, never what Figma Dev Mode already shows.
+description: Use when the user asks to create, update, or review UI handoff / dev handoff / spec boards in Figma (contents, scope with new/changed/reused spotlights, screen spec, variant × state matrix, component states, user flow, responsive breakpoints, edge cases, field validation, error and message catalog, status lifecycle, changelog) for frontend, mobile, or QA. Also use when the user wants CTA enable/disable rules, form validation rules, error messages, toasts, search / filter / sort rules, or entity statuses documented for developers. Works in any project: it adapts to the product's platform (responsive web, desktop app, mobile app, tablet), breakpoints, note language, fonts, and brand colours. Builds style-E boards that document behavior, rules, and conditions only, never what Figma Dev Mode already shows.
 metadata:
-  version: "5.2"
+  version: "5.3"
 ---
 
 # UI Handoff — Style E (Figma)
@@ -84,12 +84,12 @@ Before the first board, fill in this profile. Look in the design file, the desig
 - **Describe, don't extend.** For a plain element, name what it shows ("Account name · plan type · account ID") and stop. A note without a condition is fine.
 - **Show it, then explain it.** Every variant, option, type, state, or status a note or table describes must also appear as a **preview of the real component in that variant**. A table of options with no previews is never enough: the dev has to see what the component looks like for each kind of option. Text explains the picture; it doesn't replace it.
 - **Bullets, not prose.** Every behavior cell uses a Figma bulleted list (⌘⇧8): one fact, rule, or formula per bullet, no trailing periods. The element name is the bold title above the list.
-- **One rule shape.** Conditional bullets read `<condition> → <result>` (e.g. `Required field empty → Submit button disabled`). Put the condition first, because that's what a dev turns into an `if`.
+- **One rule shape.** A condition is one line: `<condition> → <result>` (e.g. `Required field empty` → `Submit button disabled`). Put the condition first, because that's what a dev turns into an `if`. It's written beside the UI it changes (§1c), never on a separate board.
 - **Write in the team's language.** Notes may be in the team's working language if the user asks for it. Quoted UI copy is always the **exact text** in the language it appears on screen. Board titles, pills, sub-headings, and table column headers stay in English so boards sort and search the same way.
 - **Icon sets are documented, not just drawn.** When an icon changes with a value (a type, status, channel or result), add an icon table where that element is specified: one row per value — value (quoted) · the icon at real size · its icon name as a code chip (e.g. `icon-phone`) · notes. List every value the source has, even ones no master shows yet (say so in Notes).
   - **The icon comes from the real design.** The icon cell holds an instance of the component that draws it, set to that value (or a clipped crop of that instance showing just the icon and label), never a font glyph, a typed icon name or a redrawn shape. A dev selects it and lands on the real layer.
   - **Badge and tag sets get the same table.** When a badge or tag changes look with a value (tone, result, source, with / without a sub tag), add a table with one row per case: case · the real component instance in that variant · the component and variant as a code chip (`Badge · Tone=Warning`) · notes. Several-at-once cases (several tags in a row) are their own row.
-- **Every value set gets its details.** Listing the values is not enough: for each set the dev has to implement (types, platforms or channels, results, statuses, tags), add a details table next to its option data, one row per value, with what the source gives: the API value (code chip) · where it comes from (picked by the user, set by the system, or both) · who sees it (role) · when it's shown or hidden · what it means or maps to (e.g. per type: when the result is “Completed” vs “Failed”, and what an automatic record sets). Group rows by their parent value (platforms under their type). A detail the source doesn't give is `TBD` + an Open question, never a guess.
+- **Every value set gets its details.** Listing the values is not enough: for each set the dev has to implement (types, platforms or channels, results, statuses, tags), give its Option data table (§5, 03b) detail columns, one row per value, with what the source gives: the API value (code chip) · where it comes from (picked by the user, set by the system, or both) · who sees it (role) · when it's shown or hidden · what it means or maps to (e.g. per type: when the result is “Completed” vs “Failed”, and what an automatic record sets). Group rows by their parent value (platforms under their type). A detail the source doesn't give is `TBD` + an Open question, never a guess.
 - **Every click has a next state.** If an element reveals or changes something in place (Show More / Show Less, expand, a menu), its result gets its own card right after the state it starts from, with `Next →` linking them. No master for it → the default placeholder + an Open question to design.
 - **Behavior over pixels.** Never write spacing, sizes, colors, radii, type specs, props, or tokens. Devs read those in Dev Mode. Value **formats** (currency, decimals, dates) are behavior, not styling; document them in §1b.
 - **UI copy is quoted, never boxed.** When a note names something the user sees on screen (a label, button text, tab, option, message, status badge), write the exact copy in curly quotes, Google Sans SemiBold 600, ink, the same size as the text around it: “Other”, “Retry”, “Request access”. Put the element type in plain text after it (“Retry” button). No fill, no stroke, no frame: a white box with an outline looks like a real button sitting in the table, and a fixed box gets sliced at the cell edge. Quoted copy is a text run inside the sentence, so it wraps with it and can't be cut off.
@@ -100,7 +100,7 @@ Before the first board, fill in this profile. Look in the design file, the desig
   - **Backend codes that map to a display status** (`Pending` ← `1, 7, 8, 10`) when several backend states show as one label.
   - **Figma component path** (`OrderHistory / Status`) on component boards, exactly as named in the library.
   - Style: the **code chip** (§4): Geist Mono SemiBold 14, violet `#6D28D9` on `#E4D7FD`, radius 4, padding 2 / 8, never wraps. One style for every code: API values, backend codes, `{code}` in messages, Figma component paths, `Type=Primary`. Never a second purple style.
-- **Markers are plain numbers.** A marker on a preview shows `1`, `2`, `3`…, restarting on every board, and the matching row or bullet starts with the same number. That's the only numbering on a board.
+- **Markers are plain numbers.** A marker on a preview shows `1`, `2`, `3`…, restarting on every board, and the matching row or bullet starts with the same number. That's the only numbering on a board: rules are never numbered, they're written out beside their element (§1c).
   - **A marker never covers the UI.** Place it just outside the element's top-left corner (overlapping the corner by 6px): on the button, field or pill if the element has its own shape, otherwise on the label's text box. Never on top of the label, never centred on a button. Every frame that holds a marked screen (screen frame, card preview, step column) has **Clip content off**, so a marker past the screen's edge is never cut. Flow nodes are the exception: their markers sit on the flow canvas, so the node keeps **Clip content on** (otherwise its square header corners poke out of the rounded node).
   - **One number, one row.** Each marker number appears on exactly one table row or bullet. If one area of the screen holds two elements, give it two markers (`2`, `3`) side by side, never one marker shared by two rows. Number markers in reading order (top → bottom, left → right) and renumber after any change, so there are no repeats and no gaps.
 - **New is new; existing stays existing.** When a feature adds a tab, page or section next to one that already exists, name it as the new item and say the existing one is unchanged (“A new Activity tab, after Notes… The existing History tab is not changed”). Never describe the new item as a change to the existing one, and never reuse the existing one's name for it.
@@ -110,12 +110,14 @@ Before the first board, fill in this profile. Look in the design file, the desig
 
 Most handoff questions are about rules, not layout. Sort every rule from the source into one of these buckets, and put each bucket in its fixed place. Never scatter rules into free-floating notes.
 
+**Conditions sit beside the UI they change; values stay in their tables.** Every `condition → result` from the action, display, screen-variant, option-set, limit and field-validation buckets is written in the **Rules** cell of its element's row on 01 Screen spec, beside the screen (§1c). A rule that changes what the user sees is also drawn as a state card on 06, with the same line under it. The other boards named below hold **values** (the option list with API values, the field defaults) without repeating the conditions. Messages, statuses, transitions and formats keep their own tables (09, 10), because those are reference data used across items.
+
 | Bucket | What it covers | Where it goes | Internal ref (never shown) |
 |---|---|---|---|
-| **Action rules** | Enabled when / disabled when / hidden when for every CTA, link, and icon button; what happens on click (navigate, open modal, submit, confirm first) | 01 element table, **Action rules** block | `E#` |
-| **Display & eligibility** | Which records/items are shown or excluded, and who can see or use the screen (e.g. only items the user is allowed to act on) | 01 context strip **Condition** cell + element notes | `E#` |
-| **Screen variants** | Other versions of the whole screen and the condition that shows each: role, record status, plan, feature flag, data (not component variants, which are on 02 / 03b) | 06, **Screen variants** row | `SV-0#` |
-| **Option sets** | A component whose content changes with what the user picks (checkbox / radio groups, tag pickers, dropdowns that reveal sub options, badges, or extra fields) | 03b, **Option variants** cards + **Option data** table | `OP#` |
+| **Action rules** | Enabled when / disabled when / hidden when for every CTA, link, and icon button; what happens on click (navigate, open modal, submit, confirm first) | 01, the button's row in the element table; the journey is drawn on 04 User flow | `E#` |
+| **Display & eligibility** | Which records/items are shown or excluded, and who can see or use the screen (e.g. only items the user is allowed to act on) | 01 context strip **Condition** cell + the affected elements' rows | `E#` |
+| **Screen variants** | Other versions of the whole screen and the condition that shows each: role, record status, plan, feature flag, data (not component variants, which are on 02 / 03b) | 01 rows of what differs; 06 cards show each version | `SV-0#` |
+| **Option sets** | A component whose content changes with what the user picks (checkbox / radio groups, tag pickers, dropdowns that reveal sub options, badges, or extra fields) | 03b, picker + **Option data** table side by side; conditions in the component's 01 row | `OP#` |
 | **List controls** | Search fields and match type (exact / prefix / fuzzy), filters (multi-select, `Select All` / `Clear`, date ranges), sort options + default + direction labels, pagination or scroll area, selected-count summary | 01 **List controls** block | `L#` |
 | **Limits** | Max items, max length, quotas, and what happens when the limit is reached | 01 element notes, and the limit-reached case on 06 | `E#`, `EC-0#` |
 | **Field validation** | Per input: required, min / max / range, allowed types, when it's checked, the inline message, effect on the submit CTA | 08 Field & validation | `FV-0#` |
@@ -125,8 +127,20 @@ Most handoff questions are about rules, not layout. Sort every rule from the sou
 | **Formats** | Currency symbol and decimals, unit decimals, date / time format, empty-value display | 10 Status & formats | `FMT#` |
 | **Navigation type** | Same page, new tab, modal, sheet, back, external link | 04 arrow labels | `F#` |
 
-- A rule lives in **one** place and is cited by name everywhere else (a state card says `See Field & validation › Amount`, it doesn't repeat the range).
+- A rule lives in **one** place and is cited everywhere else (a state card carries `Rule 4`, or says `See Field & validation › Amount`; it doesn't repeat the rule).
 - Only fill rows the source supports. An empty bucket the feature obviously needs (e.g. a form with no validation rules given) → one `TBD` row + Open question.
+
+## 1c. Pictures first, rules beside them
+
+Devs build from pictures, and they miss conditions that sit on a separate board or in prose far from the UI. So every rule is written **beside the thing it changes**, in words, and drawn when it changes what the user sees.
+
+- **Screen spec holds the rules.** Every step of the item at 100% on the left; on the right, the element table: `#` · Element · Rules. Each row lists that element's rules as `condition → result` lines (defaults, who sees what, what picking or clicking does, when it's disabled), with exact UI copy quoted. Where a rule has a state card, the line ends with `See States › {state}`.
+- **States show the rule as a picture, with the rule under it.** Each state or variant card on 06 is the whole screen or modal at 100% with an accent outline on what changes, and its note is the same `condition → result` line, in the same words as its Screen spec row. Never a bare reference (`Spec › 4`) as the only note: a dev reading the picture must not have to look elsewhere to know why it looks that way.
+- **Never number rules.** No `Rule 3` tags, no rule IDs, no separate Rules board. Markers number elements; rules are words beside them.
+- **Value tables hold values only.** Option data and Field & validation tables list labels, API values, defaults, who can pick, required: no column that only points back to Screen spec.
+- **UI left, table right.** Wherever a table explains a picture (Screen spec elements, option sets, fields), the real UI sits on the left and the table on the right, and both use the same marker numbers.
+- **Draw only what the product draws.** Check the source before drawing a hover message, tooltip or hint: a browser `title` attribute is not a designed component, so describe it in words (`on hover, the browser tooltip shows …`) instead of drawing a tooltip. Draw it only when the product uses a real component for it.
+- **Word budget.** If a board's text is longer than its pictures, cut the text. A Details column should read in a few minutes.
 
 ## 2. Previews
 
@@ -154,7 +168,7 @@ Most handoff questions are about rules, not layout. Sort every rule from the sou
       - **Scope tag goes in the header, never in the notes.** When a card's own item is new, changed, or reused (a component type, a variant, a state, a part of a screen), its Scope tag (§4.12) sits first in the right side of the header row, before the meta, gap 10. Never add a `Scope` section to the notes panel: the tag describes the whole card, so it belongs with the card's name. Cards whose board already carries the same tag in its board header (every card shares it) don't repeat it.
     - **Header rule:** a **2px** ink `#141414` line across the full card width, directly under the header row, so the tab sits on it. Never drop it; it's what ties the tab, meta, and preview into one card.
     - **Preview:** below the rule, no fill, padding 24 / 0, auto layout **centered horizontally**, so an instance narrower than the card sits in the middle. Screens and placeholders have **no border**: the screen is the UI exactly as designed, with no outline added around it.
-    - **Notes panel:** fill `#E3E3E3`, no stroke, bottom corners radius 12, padding 24 / 24 / 28, gap 20. Each section: label (Geist Mono 14, `#6B6B6B`) → 8 → bullets (Google Sans 16 / 145%, `#2B2A31`, bullet + 10 gap). Sections: When / Then, Layout change / Hidden, When / Show, Shows when picked / Rules.
+    - **Notes panel:** fill `#E3E3E3`, no stroke, bottom corners radius 12, padding 24 / 24 / 28, gap 20. Each section: label (Geist Mono 14, `#6B6B6B`) → 8 → bullets (Google Sans 16 / 145%, `#2B2A31`, bullet + 10 gap). On state, variant and option cards the panel holds the card's rule as one `condition → result` line (§1c), plus at most one short line per marker. Breakpoints keep their Layout change / Hidden sections.
     - **Information sits on grey, UI on white.** Notes panels (`#E3E3E3`), context strips and table cells (`#F1F1F4`) are information surfaces; screens are the UI as designed, with no border. Tags and code chips always set their own text color; UI copy is quoted text, not a chip (§1).
     - No detail crops: the screen is already at 100%.
   - **Order cards by flow, not by when they were made.** Read left → right, top → bottom like the user meets them.
@@ -181,7 +195,8 @@ Most handoff questions are about rules, not layout. Sort every rule from the sou
     - Need to point at something below the fold? Write it in the note and cite `See Screen spec`. Don't stretch the frame.
     - Every frame uses its size's real viewport height (e.g. 390 × 844 for a phone), and the card header states name + viewport (`Mobile · 390 × 844`).
   - Mark what changed with a 2px accent outline + numbered marker; start the matching bullet with the same number.
-  - Tables are only for 02 Matrix, 07 Changelog, and the rule tables on 01 (Action rules, List controls), 03b Option data, 08, 09, and 10.
+  - Tables are only for 02 Matrix, 07 Changelog, the element table and List controls on 01, 03b Option data, 08, 09, and 10.
+  - **A table that explains a picture sits beside it.** UI on the left, table on the right, top-aligned, same marker numbers on both (01 elements, 03b option sets, 08 fields). A long table repeats its picture beside each group of rows, because nothing stays pinned while a dev scrolls the canvas.
 - **Tables fit their frame; nothing is ever cut off.** Every table except 02 Matrix is exactly 1680 wide, and all its content stays inside.
   - Columns: Fixed width only for short values (a name, Yes / No, a time); the longest-text column is **Fill**. Every column must be wide enough for its header on one line; a header that wraps (`Shown` / `as`) means the column is too narrow.
   - Cells: Clip content **off**, text layers Hug height and Fill width (`textAutoResize = HEIGHT`, `layoutSizingHorizontal = FILL`), so long text wraps onto more lines instead of running past the edge. A cell's auto layout must itself be Fill width; a Hug-width cell lets its text push out sideways.
@@ -217,13 +232,18 @@ Skip a board an item doesn't need; never reorder.
 **Line 3 · Details — columns**
 - One Figma Section per item, side by side, left → right in Scope order, top-aligned, 120 apart.
 - Inside a column, boards stack **top → bottom**, 120 apart, left-aligned:
-  - **Screen or overlay:** Screen spec → Screen variants & edge cases → Field & validation → Messages (this screen only).
+  - **Screen or overlay:** Screen spec → Component types & variants (its option sets, if any) → Screen variants & edge cases → Field & validation → Messages (this screen only). Where each click goes is a line in its button's Screen spec row; the journey between screens is the User flow (Overview, or the column's own flow for a step with a sub-flow), never a second per-item flow board.
   - **Component:** Types & variants → Component states → Variant × state matrix.
 - **No column header row.** Each Details board says where it belongs in its own **location pill** (`Details · 1 of 2 · Screen name`), with the item's Scope tag right next to it at the same size. Read across to move between items, down to go deeper into one.
 - **Journey features:** columns are the steps in flow order. A branch (cancel, details, history) gets its own column right after the step it starts from, named `{step} › {branch}`. A step with its own sub-flow starts its column with its own User flow.
 - **Status-driven features:** columns are statuses and the changes between them, in lifecycle order (`Active` → `Active → Inactive (pending)` → `Inactive` → …), matching the Transitions table. A status column stacks Screen spec (in that status) → Screen variants & edge cases → Component states. A transition column stacks the chain as the user lives it: source screen with a marker on the trigger → confirm → feedback → pending screen → cancel path back. Conditions (not eligible, cut-off window, role) get a column right after the status they change. The Overview flow is a state diagram (§6).
 
-**Line 4 · Sizes**
+**Reflow after every edit.** Sections don't use auto layout, so a board that grows never pushes the boards under it. They end up overlapping, and a dev reading the canvas misses whatever is hidden. After any edit that changes a board's size (adding a table, row, card or state), reflow before reporting:
+1. **Restack the column.** Sort the section's boards top → bottom and set each one's `y` to the previous board's bottom + 120.
+2. **Grow the section** to its last board's bottom + its bottom padding (`resizeWithoutConstraints`).
+3. **Push the lines below.** If the section now ends past the next line's top − 240, move that line and every line under it down by the same amount, together. Do the same sideways when a board gets wider: the columns to its right move right.
+4. **Check the whole page.** Loop over the sibling boards in every section and the page's top-level nodes, and flag any two whose boxes intersect. Fix every hit, including ones you didn't cause, then take a screenshot of each section you touched.
+
 - Breakpoints board with one section per screen and modal (§2c), in Scope order, each reading left → right across the breakpoints at real size. Components get a row only if their layout changes by size.
 - Rows, not columns: the point is comparing one screen across sizes, side by side. Adding an item adds height, never width.
 
@@ -379,9 +399,12 @@ Look for the kit first, where the user said it lives (§0a, Locations): componen
     - Emoji text uses the system emoji font (Figma falls back to it automatically); set the emoji at 13 so it lines up with the 12 label.
 11. **TBD tag** — the only way to show missing info. Inline auto layout, padding 1/8, radius 4, fill `#FFF4D6`, **1px dashed** `#D9A21B` stroke, text `TBD` in Geist Mono SemiBold 13, `#7A5300`, +4% tracking, never wraps. Stands alone in the cell or bullet; the actual question and who to ask go in Open questions. A short hint may follow in `#7A5300` (`TBD` which users). Never write TBD as plain or muted text, and never use the TBD colors for anything else.
 12. **Scope tag** — mono pill with a dot, so it reads as a handoff annotation and never as a badge in the real UI: radius 999, Geist Mono SemiBold 12, +2%, padding 3 / 10 / 3 / 8, a 7px dot (15 text, 8px dot on board headers). `New` (fill `#E3F5EA`, text `#146C36`, dot `#22A55A`) · `Changed` (`#E6EDFF` / `#1D4ED8` / `#3B6EF0`) · `Reused` (`#FCE7F3` / `#9D174D` / `#DB2777`). Used on Scope cards, Contents, and Details board headers.
-13. **Spotlight** — a component placed over an existing screen (at 100%) on Scope: a frame with a 2px outline (`#15803D` for NEW, `#1D4ED8` for CHANGED), radius 6, and a drop shadow / overlay of white at 72% spread across the rest of the thumbnail, so the old UI fades and only the new or changed part stays sharp. A small label under the outline (`NEW` / `CHANGED`, white Geist Mono SemiBold 12 on the outline color). One spotlight per change; brand-new items get none.
+13. **Spotlight** — a component placed over an existing screen (at 100%) on Scope, variant `type = new | changed | reused`, radius 6, with a small label under the outline (white Geist Mono SemiBold 12 on the outline colour, radius 999).
+    - **New / Changed:** a **solid** 2px outline (`#15803D` for NEW, `#1D4ED8` for CHANGED) and a white overlay at 72% across the rest of the screen, so the old UI fades and only the new or changed part stays sharp. Label `New` / `Changed`. These mean "build this".
+    - **Reused:** a **dashed** 2px outline in `#DB2777` (dash 6, gap 4), no overlay of its own, around an existing component placed in this screen as is. Label `Reused · {component name}`, the name exactly as in the library. It means "use the existing component, don't rebuild it". Only on a screen that is new or changed; a reused item alone gets no spotlight.
+    - One spotlight per change or reused component; brand-new items get none. Several reused components in one area → one outline per component, never one outline around all of them.
 14. **Code chip** — the one style for everything that is code: API / enum values, backend codes, `{code}` in messages, Figma component paths, variant properties (`Type=Primary`). Geist Mono SemiBold 14, `#6D28D9` on `#E4D7FD`, radius 4, padding 2 / 8, never wraps, Hug width. Never a second purple style.
-15. **Reference** — anything that points elsewhere in the file: `↓ Details › Screen name`, `See Field & validation › Amount`, `See Breakpoints`, `Next → Hover`, and marker numbers cited in notes. Geist Mono SemiBold, violet `#7C3AED`, no fill. Dates, times, and format examples stay ink: they're data, not links.
+15. **Reference** — anything that points elsewhere in the file: `↓ Details › Screen name`, `See Field & validation › Amount`, `See States › Missing fields`, `See Breakpoints`, `Next → Hover`, and marker numbers cited in notes. Geist Mono SemiBold, violet `#7C3AED`, no fill. Dates, times, and format examples stay ink: they're data, not links. A reference always sits after words that say the rule; it never replaces them.
 16. **Position chip** — `1 of 2` in Contents and on Scope cards: Geist Mono 12, `#4A4A4A` on `#EDEDF0`, radius 999, padding 3 / 10.
 
 ## 5. Page types
@@ -392,28 +415,28 @@ Name each board frame `0# Page type — {Screen name}`.
 |---|---|---|---|
 | — | Contents | List of every line and, under Details, every item with position (`2 of 5`), kind, and Scope tag. Each name links to its section. Sits on Overview, before the User flow | — |
 | — | Scope | One card per item the feature touches (screens and overlays in flow order, then components, REUSED last): header tab = item name, meta = position + Scope tag (`NEW` / `CHANGED` / `REUSED`) · preview: the item at 100%; an existing screen gets a **spotlight** · notes: What changes (one line) · Where (`↓ Details › {item}`, or `No Details column · use as is` for REUSED). Footnote explaining the spotlight colors | — |
-| 01 | Screen spec | Context strip (Condition · Entry · Related · Screen size · Other sizes) → large instance with markers + element/behavior table → **Action rules** block → **List controls** block (list screens only) | `E#`, `L#` |
+| 01 | Screen spec | Context strip (Condition · Entry · Related · Screen size · Other sizes) → **every step of the item side by side** (a two-step modal shows Step 1 and Step 2), each at 100%, a marker on every element → **element table** beside it (`#` · Element (quoted copy + type) · Rules: `condition → result` lines, each ending with `See States › {state}` when it has one), one row per marker, numbered on through all steps → **List controls** block (list screens only) | `E#`, `L#` |
 | 02 | Variant × state matrix | Rows = variants (with "when"), columns = states (with trigger). Columns sized to the component's real width; board grows if needed (§2) | `V#`, `S#`, `V#·S#` |
-| 03 | Component states | Horizontal state cards (§2): header state name + `Next →` · preview at real width · When · Then | `S#` |
-| 03b | Component types & variants | Up to three blocks. **Component types:** horizontal cards (§2), one per type / item kind (e.g. Primary, Secondary, Ghost, Destructive, Icon only): header type name + `States: Default – Disabled` (links to Component states) · preview at real width · Use when · Don't use · Property chip (`Type=Primary`, matches the Figma variant property). **Option variants** (when the component has an option set): one card per *kind* of option, showing the component with that option picked: header option name · preview at real width · Shows when picked · Rules. **Option data:** a table listing every option, grouped by the variant card it's shown on (Option · Sub options — description · Notes) | `T#`, `OP#` |
+| 03 | Component states | Horizontal state cards (§2): header state name + `Next →` · preview at real width · note: the trigger and result in one line (`Pointer over → darker fill`) | `S#` |
+| 03b | Component types & variants | Up to three blocks. **Component types:** horizontal cards (§2), one per type / item kind (e.g. Primary, Secondary, Ghost, Destructive, Icon only): header type name + `States: Default – Disabled` (links to Component states) · preview at real width · Use when · Don't use · Property chip (`Type=Primary`, matches the Figma variant property). **Option sets** (when the component has one): per set, the **picker on the left** (the real component, with a marker on each option) and its **Option data** table on the right with the same numbers (`#` · Option (quoted) · API value · the set's details: who can pick it, set by system, sub options it opens…). A set whose options depend on a parent (platforms per type) gets one side-by-side block per parent value. **Option variants** cards only when picking an option changes the layout in a way the block above can't show | `T#`, `OP#` |
 | 04 | User flow | Flowchart (§6) | `F#`, `E#` |
 | 05 | Breakpoints | **One section per item, never mixed** (§2c). Each section = item bar + one row of cards, one per size in the project's size set (§0a), each at the breakpoint's real size, 100%, never scaled (§2): header breakpoint name + range · preview frame = real viewport size · Layout change · Hidden / moved, with a marker where the layout reflows | `B#`, `M#·B#` |
-| 06 | Screen variants & edge cases | Two card rows (§2), each in one row. **Screen variants** first: one card per version of the whole screen (by role, record status, plan, or data): header name · full screen at 100% · When · Differs from default. Then **Edge cases**: header name · full screen at 100% with numbered markers · When · Show · `See Messages › {title}` for the exact copy | `SV-0#`, `EC-0#` |
+| 06 | Screen variants & edge cases | Every rule that changes what the user sees, as a picture. Card rows (§2), one row each, the board grows: **Screen variants** (one per version: role, record status, plan, data), **Rule states** (one per rule: a type changed, an option picked, a field missing), then **Edge cases**, ending with **Longest content**. Each card: header = the state's name · the **whole** screen or modal at 100% with real data in every field (never a crop of the part that changes) and an accent outline on what changes · note = the rule as one `condition → result` line, the same words as its Screen spec row, plus `See Messages › {title}` when it shows a message | `SV-0#`, `EC-0#` |
 | 07 | Changelog | Version · Date · Affects (board › item, by name) · Change. No status column; release status is tracked outside the board | `v#.#` |
-| 08 | Field & validation | Per form: **field rules table** (Field · Required · Rule · Checked when · Message · CTA effect) → horizontal **field state cards** (§2) showing each state and each failing rule in the real component | `FV-0#`, `FV-0#·S#` |
+| 08 | Field & validation | **One table per item, every step together**, with a full-width group row per step: `#` · Field (name + a picture of the real field) · Default · Required · Validation (Checked when · Message · CTA effect, when the source gives them) → horizontal **field state cards** (§2) showing each state and each failing rule in the real component | `FV-0#`, `FV-0#·S#` |
 | 09 | Messages & errors | One **message table** per surface, in this order: Confirm → Error modal → Banner → Inline → Toast. Columns: Surface tag · Trigger · Title · Message · Error code · Actions → result. Preview column holds the real instance at 100% | `MSG-0#` |
 | 10 | Status & formats | **Status previews** (one card per status, in lifecycle order: header tab = label shown, meta = API value · preview of the component or screen in that status · Shows · Actions) → **Status lifecycle table** (Status shown (quoted) · API value · Maps from (backend codes) · Meaning · Set by · Allowed actions · Not allowed) → **Transitions table** (From → To, as quoted status labels · Trigger (element name) · Who · Confirm (message title) · Feedback (message title) · Pending status shown · Takes effect · Can cancel? → back to) → **Time windows table** (Window · What's blocked or changed · What the user sees) → **Formats table** (Value type · Format · Example · Empty value) | `ST#`, `ST#→ST#`, `TW#`, `FMT#` |
 
-**01 Action rules block** — divider grid, one row per actionable element: `#` (marker number, if it has one) · Element (quoted copy + type) · Enabled when · Disabled when · Hidden when · On click → result. Write `—` for "never", and `TBD` when the source is silent. Every CTA on the screen gets a row, even if it's always enabled.
+**Action rules live in the button's row.** Every CTA, link and icon button gets its enabled / disabled / hidden conditions and its on-click result as lines in its Screen spec row. A CTA with no condition still gets an on-click line. `TBD` when the source is silent.
 
 **01 List controls block** — divider grid, one row per control: Search (fields searched, match type: exact / prefix / fuzzy, min characters), Filter (options, multi-select, `Select All` / `Clear`, ranges), Sort (options, default, direction labels as shown in the UI), Reset / Apply behavior, Pagination or scroll area (page size, inner scroll), Selected summary (e.g. `2 Selected`). No results → cite the 06 card.
 
-**03b option variants rules:**
-- **One card per kind, not per option.** Options that make the component look and behave the same share a card (e.g. all options that open a sub row); the Option data table lists each one and points to its card. Every kind that looks or behaves differently gets its own card: opens sub options, adds a badge, shows nothing extra, needs a note field.
-- The preview is the real component with that option picked, at real width, with everything the bullets mention visible (the sub row, the badge, the note field).
-- Add a card for the combined case when picking several options changes the layout (e.g. two options open, each with its own sub row).
-- The Option data table never stands alone. If there is a table, there are cards above it.
-- **Group rows by card, don't add a "Shown as" column.** Before each group of rows, add a full-width group row (fill `#E4E4E8`, padding 12 / 24): mono label `SHOWN AS` (`#6B6B6B`) + the card's name (Google Sans Medium 16, ink). The rows under it are the options shown on that card. A narrow link column gets clipped and reads like a code; a group row doesn't.
+**03b option set rules:**
+- **The picker and its table side by side.** Left: the real component at 100%, in the state that shows the set (for a picker that opens sub options, with one option picked so its sub row shows), a marker on every option. Right: the Option data table, one row per option, the same numbers. The Option data table never stands alone.
+- **One block per parent value.** When the options depend on another choice (platforms per type), repeat the block for each parent value, each with the picker set to that value, so the picture is always beside the rows it explains.
+- **Values the user can't pick still get a row** (set only by the system, hidden for a role), with `—` in `#` and the reason in the who-can-pick column.
+- **Values only.** Who sees an option, what picking it opens or clears: the condition is a line in the component's Screen spec row. The table holds values: label, API value, sub options, who can pick it, set by.
+- **Option variant cards** are only for layouts the side-by-side block can't show (e.g. two options open at once, each with its own sub row). Each card's note is its rule line.
 - The 01 element note for that component keeps only the selection rules (required, single / multi, default) and cites `See Component types & variants › {component}`. It does not hold the option list.
 - Option labels and sub option labels are exact UI copy, quoted. Descriptions may be in the team's language.
 
@@ -479,9 +502,14 @@ Name each board frame `0# Page type — {Screen name}`.
   - [ ] Marker pills in tables show as full circles (`#` column wide enough, Clip content off)
   - [ ] No internal code on the canvas: no `E#`, `FV`, `MSG`, `ST`, `SV`, `OP`, `B#`, no page numbers in pills or labels, nothing in brackets after a name
   - [ ] Every gap uses the TBD tag (amber, dashed), never plain text, and has a row in Open questions
-  - [ ] All notes are bullets in `condition → result` shape; no invented rules; every `TBD` is listed in Open questions
+  - [ ] Every condition is a `condition → result` line in its element's Screen spec row, beside the screen; no separate Rules board, no rule numbers or tags; no invented rules; every `TBD` is listed in Open questions
+  - [ ] Every rule that changes what the user sees has a state card, and the card's note is that rule in the same words
+  - [ ] Markers number only this board's elements or values; nothing else on the board is numbered
+  - [ ] Every state card shows the whole screen or modal at 100% with real data (no crops, no `…` placeholders), and its note says the rule in words, not just a reference
+  - [ ] Every table that explains a picture sits beside it (UI left, table right, same numbers)
   - [ ] Every rule from the source / designer notes is in exactly one §1b bucket, and cited by name elsewhere
-  - [ ] Every CTA has an Action rules row (enabled / disabled / hidden / on click)
+  - [ ] Every CTA's Screen spec row has its enabled / disabled / hidden and on-click lines
+  - [ ] Hover messages are drawn only when the product draws them; a browser `title` is described in words
   - [ ] Every list screen has a List controls block (search fields + match type, filter, sort default, scroll / paging)
   - [ ] Every input has 08 rows for each rule, with exact inline copy and CTA effect
   - [ ] Every toast, banner, modal, and inline error in the feature is on 09 once, with exact copy and actions
@@ -513,7 +541,7 @@ Name each board frame `0# Page type — {Screen name}`.
   - [ ] 05: every frame is fixed at the viewport height with Clip content on; no card shows the full page or grows taller than the others
   - [ ] Five lines top → bottom: Overview (Contents + User flow) → Scope (Scope board, then Shared rules) → Details (one column per item) → Sizes (one row per screen; skipped for a one-size product) → Log
   - [ ] Every Scope item that isn't REUSED has a Details column and (if it's a screen or modal) a Sizes row, in the same order with the same position (`2 of 5`)
-  - [ ] Each Details column stacks its boards top → bottom (screen: spec → variants & edge cases → field & validation → messages; component: types & variants → states → matrix)
+  - [ ] Each Details column stacks its boards top → bottom (screen: spec → types & variants → variants & edge cases → field & validation → messages; component: types & variants → states → matrix)
   - [ ] Every line bar links up and on (`↑ · →`); one feature colour per feature, used only on the line stripe, header bar, pill dot, and Breakpoints item bars
   - [ ] No repeated headers: no section or column header rows, no board labels above boards; each board = header bar + location pill (+ Scope tag on Details) + sentence-case title + question
   - [ ] Every board is a white card (`#D6D6DA` outline, radius 16); sections are transparent; no more than two nested frames around any content
@@ -523,7 +551,7 @@ Name each board frame `0# Page type — {Screen name}`.
   - [ ] Boards `#FFFFFF` at 95%; notes panels `#E3E3E3`; strips and table cells `#F1F1F4`; grid lines `#E8E8EC`
   - [ ] No border on any screen preview
   - [ ] No marker sits on a label or is cut at a frame edge; frames holding marked screens have Clip content off
-  - [ ] Existing screens on Scope show a spotlight on what's NEW (green) or CHANGED (blue)
+  - [ ] Existing screens on Scope show a spotlight on what's NEW (green, solid) or CHANGED (blue, solid), and a dashed pink REUSED outline, named, on every existing component the screen uses as is
   - [ ] Row headers show `from` / `next` / `branches`; no connector lines between rows
   - [ ] Icon, badge and tag tables show real component instances (or crops of them), never glyphs or redrawn icons
   - [ ] The overlay-on-host view appears once (Breakpoints, flow), not as a thumbnail on every card
@@ -531,19 +559,25 @@ Name each board frame `0# Page type — {Screen name}`.
   - [ ] Every screen and modal step in the flow has its own Breakpoints section
   - [ ] New tabs, pages and sections are named as new; the existing ones they sit beside are described as unchanged
   - [ ] Every value set has a details table (API value, source, who sees it, meaning or mapping), not just the list of values
+  - [ ] No two boards, sections or lines overlap anywhere on the page: every column was restacked (120 apart) and every line below moved after the last size change
   - [ ] No placeholders left
   - [ ] No side notes by titles, no sign-off or status blocks
   - [ ] Changelog row added, listing affected items by name
 
 ## 8. Don't
 
+- Grow a board (add a table, row, card or state) and stop there. Boards don't push each other, so reflow the column, the section and every line below (§2d), then check the page for overlaps.
 - Invent rules, conditions, edge-case handling, validation ranges, error codes, or copy. Write `TBD` and ask.
-- Paragraph notes. Use bullets in `condition → result` shape.
+- Paragraph notes. One `condition → result` line per rule.
+- Put rules on a separate board, or number them (`Rule 3`). Write each rule beside the UI it changes.
+- Leave a state card with only a reference (`Spec › 4`) as its note, or crop it to the part that changes. Whole screen at 100%, rule in words under it.
+- Add a flow board inside a Details column that redraws clicks the User flow and Screen spec already cover. Each click is a line in its button's row; the journey is the User flow.
+- Put a table under the picture it explains, or a picture far from its rows. UI left, table right; repeat the picture per group in a long table.
 - Leave rules as floating sticky notes next to screens. Put each one in its §1b bucket.
 - Repeat the same rule on several boards. Write it once, cite it by name.
 - Paraphrase messages. 09 holds the exact copy in quotes.
 - Document options, variants, or types as a text-only table. Show the component in each variant, then list the data under it.
-- Put a long option list inside a 01 element note. It goes on 03b as Option variants + Option data.
+- Put a long option list inside a 01 element note. It goes on 03b as the picker + Option data, side by side.
 - Mix whole-screen variants (`SV`, on 06) with component variants (`V`, on 02 / 03b).
 - Mix record statuses (`Pending`, `Expired`) into component states (Hover, Disabled). Statuses go on 10.
 - Show a scheduled or pending change only as a toast. The pending state is its own status with its own screen.
@@ -569,10 +603,10 @@ Name each board frame `0# Page type — {Screen name}`.
 - Put the user flow or the Changelog anywhere but their own lines: the flow sits on Overview with Contents, the Changelog alone on the last line.
 - Lay a Details item's boards side by side, or mix two items in one column. One column per item, boards stacked top → bottom.
 - Put Breakpoints inside Scope or inside a Details column. It's its own Sizes line, one row per screen.
-- Show an existing screen on Scope without a spotlight. Fade the old UI and outline only what's new or changed.
+- Show an existing screen on Scope without a spotlight. Fade the old UI, outline what's new or changed, and mark components used as is with the dashed Reused outline.
 - Let a table or context strip stretch to the full width of a wide board. They stay 1680.
 - Let anything in a table get cut off: clipped text, chips running past the cell, a table wider than the board, or headers wrapping onto two lines. Wrap the content, widen the Fill column, or split the table.
-- Add a narrow "Shown as" or link column in accent mono. Group rows under a `SHOWN AS` row instead.
+- Add a narrow link column in accent mono. Use group rows, or say it in words in the row.
 - Wrap cards onto a second line inside a board (3 + 3, 4 + 3). Cards stay in one row and the board grows.
 - Order Details columns differently from the Scope cards. Same order, same position number.
 - Put a branch (cancel, details, history) inside a step's column. It gets its own column right after the step it starts from.
