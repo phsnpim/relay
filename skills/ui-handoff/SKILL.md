@@ -77,6 +77,11 @@ Before the first board, fill in this profile. Look in the design file, the desig
 2. Keep masters where the user said in Locations (§0a): the designers' page, or a `Handoff sources` page. Name each one plainly: `Order history — first page`.
 3. Boards only ever hold **instances** of those masters, so design edits update the handoff automatically.
 4. If a screen is still a plain frame, stop and make it a component before you place it on a board.
+5. **Label every variant above it.** When you build or extend a component set, put a name label directly above each variant, so anyone scanning the page sees which variant is which without opening the properties panel.
+   - **Text:** the variant's property values in plain words, the same names devs see in Dev Mode (`Buy`, `Cross AMC`; several properties → `Proposal · Hover`). Never a code or a number.
+   - **Style:** first look for variant labels the team already uses in the file and copy them exactly. If there are none, use a solid label chip: fill lime `#B8E62E`, ink `#141414` text, Google Sans Medium 24, padding 8 / 16, radius 2. It's solid so it reads on a dark or light canvas. Record the style in the `Handoff profile`.
+   - **Placement:** left-aligned with the variant, 16px above its top edge. Labels are **not** inside the component set: a set may only hold variants, and a label inside would ship with every instance. Wrap the set and its labels in a Section named after the component, and space the variants (at least label height + 32 apart) so no label overlaps the variant above it.
+   - **Keep them in step.** After adding, renaming, reordering or resizing variants, move each label back above its variant and rename it to match; delete labels whose variant is gone. Check by script: every variant has exactly one label whose text matches its property values and whose box sits 16px above it.
 
 ## 1. Content rules
 
@@ -575,6 +580,7 @@ Name each board frame `0# Page type — {Screen name}`.
   - [ ] New tabs, pages and sections are named as new; the existing ones they sit beside are described as unchanged
   - [ ] Every value set has a details table (API value, source, who sees it, meaning or mapping), not just the list of values
   - [ ] No two boards, sections or lines overlap anywhere on the page: every column was restacked (120 apart) and every line below moved after the last size change
+  - [ ] Every variant of every component set you built or changed has a matching name label 16px above it, outside the set, inside the component's Section
   - [ ] No placeholders left
   - [ ] No side notes by titles, no sign-off or status blocks
   - [ ] Changelog row added, listing affected items by name
@@ -598,6 +604,7 @@ Name each board frame `0# Page type — {Screen name}`.
 - Show a scheduled or pending change only as a toast. The pending state is its own status with its own screen.
 - Force a status-driven feature into numbered steps. Use the state layout.
 - Box UI copy in a white or outlined chip, or write it plain with no quotes. Write it as quoted SemiBold text: “Other”.
+- Leave a component set's variants unlabelled, or put the labels inside the set. Each variant gets its name label above it, outside the set.
 - Copy, duplicate, detach, flatten, or export screens onto boards.
 - Scale or resize a preview. Every screen is 100%; the board grows.
 - Put a grey outline or hairline around a screen preview.
