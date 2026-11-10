@@ -153,6 +153,10 @@ Devs build from pictures, and they miss conditions that sit on a separate board 
 - **Real size, always 100%.** Every preview is the master instance at 100%: never scaled down with the Scale tool (K) and never resized. A scaled screen reads as a different UI and its text is unreadable; a resized one reflows. The board grows to fit the screen instead (Hug, min 1920). Never rebuild a screen from shapes. After placing each preview, compare it with the source frame: every button, tab, and label must read in full. **The one exception is 05 Breakpoints**, which is also 100% but crops the height to the viewport (see below).
 - **Show the proof.** Everything a note mentions (a Carried Forward row, a "(cont. 1/N)" heading, a footer page number, a disabled CTA, an inline error) must be visible and readable in the preview. Never crop it out.
   - The full screen at 100% is the preview; no thumbnails and no zoomed detail crops.
+  - **What the note is about must be above the fold.** A modal or page with a fixed height and a scrolling body hides whatever sits below it. For each state, check that the part its note talks about is visible. If it isn't:
+    - **One area matters** (an edited summary, an opened excerpt, an inline error far down): show the body scrolled to it. Put the body's content in an inner `Scrolled content` frame, absolutely positioned inside the clipped body, shifted up just enough to bring that area into view, never past the content's end. The header and footer stay where they are.
+    - **The whole height matters** (`Longest content`, or a note about how the layout grows): unroll it. The body and the state hug their content so the full height shows, and the card says the real modal scrolls at its max height.
+  - **After moving sections inside a screen** (reordering, adding a block), re-check every state's note against what's visible, and scroll or unroll the states that lost their point below the fold. Then reflow the boards that grew (§2d).
   - Add a marker on each referenced area, labelled with that bullet's number (see Markers, §1).
 - **Overlays sit on their host — once.** Where a modal, sheet, toast or dropdown appears is shown on its host (host under a 45% ink scrim for modals and sheets, unscrimmed for toasts and dropdowns) on **Breakpoints** and in the flow's overlay steps. State, option, field and message cards show the overlay alone at 100%. Never add an "opens on" host thumbnail to every card: the same context repeated on every card is noise.
   - A modal shown on its host follows the product's height rule (e.g. max height, then the body scrolls with header and footer fixed). Never let the frame cut off its footer.
@@ -590,6 +594,7 @@ Name each board frame `0# Page type — {Screen name}`.
   - [ ] Icon, badge and tag tables show real component instances (or crops of them), never glyphs or redrawn icons
   - [ ] The overlay-on-host view appears once (Breakpoints, flow), not as a thumbnail on every card
   - [ ] A `Longest content` state exists and holds up at every breakpoint
+  - [ ] In every state card, what the note talks about is visible: scrolled into view, or unrolled for Longest content; nothing the note mentions is below the fold
   - [ ] Every screen and modal step in the flow has its own Breakpoints section
   - [ ] New tabs, pages and sections are named as new; the existing ones they sit beside are described as unchanged
   - [ ] Every value set has a details table (API value, source, who sees it, meaning or mapping), not just the list of values
@@ -623,7 +628,7 @@ Name each board frame `0# Page type — {Screen name}`.
 - Scale or resize a preview. Every screen is 100%; the board grows.
 - Put a grey outline or hairline around a screen preview.
 - Centre a marker on a button or label, or let a parent frame clip it.
-- Crop or cut off the rows, headings, footers, disabled CTAs, or inline errors a note refers to.
+- Crop or cut off the rows, headings, footers, disabled CTAs, or inline errors a note refers to, or leave them below a modal's fold. Scroll the body to them, or unroll the state.
 - Number markers differently from their rows.
 - Reuse one marker number for two rows, or let a marker pill be cut off by a narrow `#` column.
 - Write missing info as plain or grey text (`TBD — confirm with design`). Use the TBD tag, so gaps stand out from real data at a glance.
