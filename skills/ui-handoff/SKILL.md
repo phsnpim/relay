@@ -2,7 +2,7 @@
 name: ui-handoff
 description: Use when the user asks to create, update, or review UI handoff / dev handoff / spec boards in Figma (contents, scope with new/changed/reused spotlights, screen spec, variant × state matrix, component states, user flow, responsive breakpoints, edge cases, field validation, error and message catalog, status lifecycle, changelog) for frontend, mobile, or QA. Also use when the user wants CTA enable/disable rules, form validation rules, error messages, toasts, search / filter / sort rules, or entity statuses documented for developers. Works in any project: it adapts to the product's platform (responsive web, desktop app, mobile app, tablet), breakpoints, note language, fonts, and brand colours. Builds style-E boards that document behavior, rules, and conditions only, never what Figma Dev Mode already shows.
 metadata:
-  version: "5.3"
+  version: "5.4"
 ---
 
 # UI Handoff — Style E (Figma)
@@ -79,7 +79,7 @@ Before the first board, fill in this profile. Look in the design file, the desig
 4. If a screen is still a plain frame, stop and make it a component before you place it on a board.
 5. **Label every variant above it.** When you build or extend a component set, put a name label directly above each variant, so anyone scanning the page sees which variant is which without opening the properties panel.
    - **Text:** the variant's property values in plain words, the same names devs see in Dev Mode (`Default`, `Error`; several properties → `Primary · Hover`). Never a code or a number.
-   - **Style:** first look for variant labels the team already uses in the file and copy them exactly. If there are none, use a solid label chip: fill lime `#B8E62E`, ink `#141414` text, Google Sans Medium 24, padding 8 / 16, radius 2. It's solid so it reads on a dark or light canvas. Record the style in the `Handoff profile`.
+   - **Style:** first look for variant labels the team already uses in the file and copy them exactly. If there are none, use a solid label chip: fill lime `#B8E62E`, ink `#141414` text, Google Sans Flex Medium 24, padding 8 / 16, radius 2. It's solid so it reads on a dark or light canvas. Record the style in the `Handoff profile`.
    - **Placement:** left-aligned with the variant, 16px above its top edge. Labels are **not** inside the component set: a set may only hold variants, and a label inside would ship with every instance. Wrap the set and its labels in a Section named after the component, and space the variants (at least label height + 32 apart) so no label overlaps the variant above it.
    - **Keep them in step.** After adding, renaming, reordering or resizing variants, move each label back above its variant and rename it to match; delete labels whose variant is gone. Check by script: every variant has exactly one label whose text matches its property values and whose box sits 16px above it.
 
@@ -97,7 +97,7 @@ Before the first board, fill in this profile. Look in the design file, the desig
 - **Every value set gets its details.** Listing the values is not enough: for each set the dev has to implement (types, platforms or channels, results, statuses, tags), give its Option data table (§5, 03b) detail columns, one row per value, with what the source gives: the API value (code chip) · where it comes from (picked by the user, set by the system, or both) · who sees it (role) · when it's shown or hidden · what it means or maps to (e.g. per type: when the result is “Completed” vs “Failed”, and what an automatic record sets). Group rows by their parent value (platforms under their type). A detail the source doesn't give is `TBD` + an Open question, never a guess.
 - **Every click has a next state.** If an element reveals or changes something in place (Show More / Show Less, expand, a menu), its result gets its own card right after the state it starts from, with `Next →` linking them. No master for it → the default placeholder + an Open question to design.
 - **Behavior over pixels.** Never write spacing, sizes, colors, radii, type specs, props, or tokens. Devs read those in Dev Mode. Value **formats** (currency, decimals, dates) are behavior, not styling; document them in §1b.
-- **UI copy is quoted, never boxed.** When a note names something the user sees on screen (a label, button text, tab, option, message, status badge), write the exact copy in curly quotes, Google Sans SemiBold 600, ink, the same size as the text around it: “Other”, “Retry”, “Request access”. Put the element type in plain text after it (“Retry” button). No fill, no stroke, no frame: a white box with an outline looks like a real button sitting in the table, and a fixed box gets sliced at the cell edge. Quoted copy is a text run inside the sentence, so it wraps with it and can't be cut off.
+- **UI copy is quoted, never boxed.** When a note names something the user sees on screen (a label, button text, tab, option, message, status badge), write the exact copy in curly quotes, Google Sans Flex SemiBold 600, ink, the same size as the text around it: “Other”, “Retry”, “Request access”. Put the element type in plain text after it (“Retry” button). No fill, no stroke, no frame: a white box with an outline looks like a real button sitting in the table, and a fixed box gets sliced at the cell edge. Quoted copy is a text run inside the sentence, so it wraps with it and can't be cut off.
 - **Names, not codes.** On the canvas, refer to everything by the name the team already uses: the element (`Next` button), the field (Amount), the message title (`Discard changes?`), the status (`Needs review`), the breakpoint (Large · 1280), the card title (Empty). Never add a code in brackets after a name (`Needs review (ST1)` is wrong).
 - **Cross-references use names.** Point to another board as `See {board name} › {item}`: `See Field & validation › Amount`, `See Messages › Discard changes?`. When two items share a name, add the difference in words (`Something went wrong — timeout`).
 - **Dev names are welcome; our codes are not.** Real system names help the dev find things in code and Dev Mode, so show them whenever the source gives them, never invented (TBD tag otherwise, asked to backend):
@@ -172,12 +172,12 @@ Devs build from pictures, and they miss conditions that sit on a separate board 
   - **Separate cards, not a shared grid.** Each card is its own frame (component `Handoff / Card`): **no fill and no outer stroke**, so it sits straight on the white board; radius 12, Clip content on. Gap 24 between cards, align top. Cards hug their content.
   - **Card, top to bottom:**
     - **Header row:** full card width, auto layout horizontal, space between, align center, padding right 24.
-      - **Left · tab** (`Handoff / Dark header cell`, card variant): fill ink `#141414`, white text, padding 12 / 24, top corners radius 12, width Hug. **Title only** (Google Sans Medium 18).
+      - **Left · tab** (`Handoff / Dark header cell`, card variant): fill ink `#141414`, white text, padding 12 / 24, top corners radius 12, width Hug. **Title only** (Google Sans Flex Medium 18).
       - **Right · meta**, outside the tab, on the white board, gap 6: meta text (Geist Mono 14, `#6B6B6B`: `Next → {state names}`, the range, or what it links to) → optional **marker ref** (Geist Mono SemiBold 15): the number of the marker this card belongs to. No meta → leave the right side empty.
       - **Scope tag goes in the header, never in the notes.** When a card's own item is new, changed, or reused (a component type, a variant, a state, a part of a screen), its Scope tag (§4.12) sits first in the right side of the header row, before the meta, gap 10. Never add a `Scope` section to the notes panel: the tag describes the whole card, so it belongs with the card's name. Cards whose board already carries the same tag in its board header (every card shares it) don't repeat it.
     - **Header rule:** a **2px** ink `#141414` line across the full card width, directly under the header row, so the tab sits on it. Never drop it; it's what ties the tab, meta, and preview into one card.
     - **Preview:** below the rule, no fill, padding 24 / 0, auto layout **centered horizontally**, so an instance narrower than the card sits in the middle. Screens and placeholders have **no border**: the screen is the UI exactly as designed, with no outline added around it.
-    - **Notes panel:** fill `#E3E3E3`, no stroke, bottom corners radius 12, padding 24 / 24 / 28, gap 20. Each section: label (Geist Mono 14, `#6B6B6B`) → 8 → bullets (Google Sans 16 / 145%, `#2B2A31`, bullet + 10 gap). On state, variant and option cards the panel holds the card's rule as one `condition → result` line (§1c), plus at most one short line per marker. Breakpoints keep their Layout change / Hidden sections.
+    - **Notes panel:** fill `#E3E3E3`, no stroke, bottom corners radius 12, padding 24 / 24 / 28, gap 20. Each section: label (Geist Mono 14, `#6B6B6B`) → 8 → bullets (Google Sans Flex 16 / 145%, `#2B2A31`, bullet + 10 gap). On state, variant and option cards the panel holds the card's rule as one `condition → result` line (§1c), plus at most one short line per marker. Breakpoints keep their Layout change / Hidden sections.
     - **Information sits on grey, UI on white.** Notes panels (`#E3E3E3`), context strips and table cells (`#F1F1F4`) are information surfaces; screens are the UI as designed, with no border. Tags and code chips always set their own text color; UI copy is quoted text, not a chip (§1).
     - No detail crops: the screen is already at 100%.
   - **Order cards by flow, not by when they were made.** Read left → right, top → bottom like the user meets them.
@@ -263,7 +263,7 @@ Skip a board an item doesn't need; never reorder.
 - **Line header = ink bar** (above the line): fill `#141414`, an 8px left stripe in the feature colour, radius 12, padding 28 / 36. Mono `LINE {n}` in `#B5B5B5` + line name, 40 bold, white; on the same row, right side, mono 16 `#B5B5B5`: `↑ {up} · {next} →` → the question, 22, `#C9C9C9`. It carries its own fill, so it reads on any canvas colour.
 - **No section headers.** Lines and Details columns get no header inside them: the line bar names the part of the talk, and each board's location pill names the line, the position and the item. Never draw canvas connector lines between sections; they cross boards and break when anything moves.
 - **Say it once.** Each level names something new, never the same thing again: line bar = which part of the talk; location pill = where this board sits (line · position · item); board title = which page type; the question under it = why the board exists. No board label above boards (the Figma frame name is enough), no column header that repeats the pill, and no section title that repeats the line name. If two stacked headers say the same word, delete the lower one.
-- **Headings always outrank what's under them.** A heading is never smaller, lighter, or greyer than the content it introduces: sub-headings are Google Sans SemiBold 20, ink, sentence case (`Screen variants`, `Field rules`, `Open questions`), with an optional grey note line (16, `#6B6B6B`) under them; Contents group headings are Geist Mono SemiBold 20 in the feature colour, with their items smaller and softer below. Grey is for meta and hints, never for a heading.
+- **Headings always outrank what's under them.** A heading is never smaller, lighter, or greyer than the content it introduces: sub-headings are Google Sans Flex SemiBold 20, ink, sentence case (`Screen variants`, `Field rules`, `Open questions`), with an optional grey note line (16, `#6B6B6B`) under them; Contents group headings are Geist Mono SemiBold 20 in the feature colour, with their items smaller and softer below. Grey is for meta and hints, never for a heading.
 - Positions (`2 of 5`) are reading aids, not codes: same number on the Scope card, the Contents entry, the Details column, and the Sizes row.
 
 **Spacing** — 240 between lines, 32 from a line bar to its boards, 120 between boards in a row or column. Everything top-aligned.
@@ -359,21 +359,21 @@ Create these as Figma **color and text styles** (or variables) in the handoff li
 
 | Text style | Spec |
 |---|---|
-| Line bar title | Google Sans 40 / Bold / white |
-| Board title (page type) | Google Sans 44 / SemiBold / −1% / 110% / ink, sentence case |
-| Board question | Google Sans 20 / `#6B6B6B` |
+| Line bar title | Google Sans Flex 40 / Bold / white |
+| Board title (page type) | Google Sans Flex 44 / SemiBold / −1% / 110% / ink, sentence case |
+| Board question | Google Sans Flex 20 / `#6B6B6B` |
 | Location pill / Scope tag on a board header | Geist Mono 15 / SemiBold |
-| Sub-heading (`Screen variants`, `Field rules`, `Open questions`…) | Google Sans 20 / SemiBold / ink, sentence case |
-| Contents group heading / item | Geist Mono 20 SemiBold feature colour / Google Sans 16 `#4A4A4A` |
-| Card tab title | Google Sans 18 / Medium |
-| Body / conditions | Google Sans 16 / 145% |
-| Quoted UI copy | Google Sans SemiBold, ink, same size as the text around it |
+| Sub-heading (`Screen variants`, `Field rules`, `Open questions`…) | Google Sans Flex 20 / SemiBold / ink, sentence case |
+| Contents group heading / item | Geist Mono 20 SemiBold feature colour / Google Sans Flex 16 `#4A4A4A` |
+| Card tab title | Google Sans Flex 18 / Medium |
+| Body / conditions | Google Sans Flex 16 / 145% |
+| Quoted UI copy | Google Sans Flex SemiBold, ink, same size as the text around it |
 | Code chip, references | Geist Mono 14 / SemiBold |
 | Marker numbers, meta | Geist Mono 13–15 |
 
-**Fonts.** The handoff uses Google Sans (text) and Geist Mono (labels, codes). Another team's Figma may not have them: before building, `await figma.loadFontAsync(...)` each style you need. If either fails, use **Inter** for Google Sans and **Roboto Mono** for Geist Mono (both ship with Figma), keep every size and weight the same, and note the swap in the project profile. Never mix the two pairs on one file.
+**Fonts.** The handoff uses Google Sans Flex (text) and Geist Mono (labels, codes). Another team's Figma may not have them: before building, `await figma.loadFontAsync(...)` each style you need. If either fails, use **Inter** for Google Sans Flex and **Roboto Mono** for Geist Mono (both ship with Figma), keep every size and weight the same, and note the swap in the project profile. Never mix the two pairs on one file.
 
-If notes use a non-Latin script, add a matching fallback font to every text style so line height stays at 145%.
+If notes use a non-Latin script, add a matching fallback font to every text style so line height stays at 145%. **Thai uses Anuphan** (Figma ships it): set Thai runs, or Thai notes, in Anuphan at the same size and weight.
 
 **Board frame:** white card (fill `#FFFFFF` at 95% opacity, 1px `#D6D6DA` outline, radius 16); width Fixed 1920, but switch to Hug (min 1920) when a table needs more room; height Hug (min 1080); vertical auto layout, padding 96 top/bottom × 120 left/right, gap 48.
 
@@ -384,8 +384,8 @@ Look for the kit first, where the user said it lives (§0a, Locations): componen
 1. **Board header** — opens every board, nothing else beside it:
    - A **6px bar** in the feature colour, radius 3, on the left, as tall as the header; gap 20.
    - **Location pill** (Geist Mono SemiBold 15, `#6D28D9` on `#EFE8FE`, radius 999, padding 5 / 14 / 5 / 12, an 8px dot in the feature colour) naming where the board sits: `Overview`, `Scope`, `Scope · Shared rules`, `Details · 1 of 2 · Screen name`, `Sizes`, `Log`. On Details boards the item's Scope tag sits right after it, gap 10, at exactly the same size (30 tall, 15 text).
-   - **Title:** the page type in sentence case (`Screen spec`, `Screen variants & edge cases`, `Component states`), Google Sans SemiBold 44, ink.
-   - **Question** under it, Google Sans 20, `#6B6B6B`: what the board answers (`What's on the screen and what each action does`).
+   - **Title:** the page type in sentence case (`Screen spec`, `Screen variants & edge cases`, `Component states`), Google Sans Flex SemiBold 44, ink.
+   - **Question** under it, Google Sans Flex 20, `#6B6B6B`: what the board answers (`What's on the screen and what each action does`).
    - No eyebrow, no side note, no item-name line: the pill already names the item.
 2. **Divider grid** (tables and context strips only; cards are separate, §2) — auto layout (Grid, or vertical stack of horizontal rows) with **1px gap**, frame fill `#E8E8EC`, 1px `#E8E8EC` stroke, radius 12, **Clip content** on. Each cell carries its own fill (`#F1F1F4`; label cells `#E4E4E8`), so the 1px gaps read as hairlines. No strokes on cells.
 3. **Dark header cell** — fill ink `#141414`. In tables: padding 18/24, `#E5E5E5` mono label. On cards: a Hug-width tab, white text, padding 12/24, top corners radius 12, title only (18 Medium); the meta sits outside it on the right of the header row in `#6B6B6B`.
@@ -401,7 +401,7 @@ Look for the kit first, where the user said it lives (§0a, Locations): componen
    - Centered label: Geist Mono 13–15, `#9A9893`, lowercase, saying what goes there (`state capture`, `screen capture`, `screen capture · 1440 × 900`)
    - Same aspect ratio as the master it stands in for, so nothing shifts on swap
    - Use **Swap instance** to replace it with the master instance; never hand off a board that still has placeholders
-8. **Quoted UI copy** — not a component and not a frame: a text run inside the note or cell text, “exact copy” in curly quotes, Google Sans SemiBold 600, ink `#141414`, same size as the text around it. Never boxed, filled, or outlined (that reads as a real button), and never accent (accent is for codes).
+8. **Quoted UI copy** — not a component and not a frame: a text run inside the note or cell text, “exact copy” in curly quotes, Google Sans Flex SemiBold 600, ink `#141414`, same size as the text around it. Never boxed, filled, or outlined (that reads as a real button), and never accent (accent is for codes).
 9. **Marker** — pill, fill accent, white Geist Mono 14, text = number (`1`). A component with a text property.
 10. **Surface tag** — names where a message or step appears: emoji + mono uppercase label in a **light pill** (fill `#FFFFFF`, 1px `#D4D4D8` outline, ink `#141414` Geist Mono SemiBold 12, +4%, radius 999, padding 3 / 10 / 3 / 8, gap 6). Light so it reads on every background it sits on: the ink header of a flow node, the grey table cells of 09. Never ink-filled (it vanishes on an ink header) and never accent or a tag hue (those already mean something).
     - One emoji per surface, always the same one in the file: `❓ CONFIRM` · `🪟 MODAL` · `📄 SHEET` · `📢 BANNER` · `✏️ INLINE` · `🍞 TOAST` · `🔔 PUSH` · `✉️ EMAIL` · `💬 SMS` · `🌐 BROWSER`. A surface not on this list gets one plain, obvious emoji, added to the `Handoff profile` so it's reused.
@@ -491,7 +491,7 @@ Name each board frame `0# Page type — {Screen name}`.
 - **Screen flow = step cards with the screen under them.** When the user asks to map a screen flow (or a journey), every step is a **step node**: a step card on top and the real screen directly under it. The reader scans the cards for the story and drops to the screen to see where it happens.
 - **Flow node component**, variant `type = step | decision | error | terminal`:
   - **Step card:** as wide as the screen under it, white, 2px ink stroke, radius 12, padding 24 / 32, everything centred.
-    - **Title:** what the actor does at this step, a short verb phrase in Title Case (`Signs In First`, `Taps Start`), Google Sans SemiBold 28, ink. Never the screen's name alone.
+    - **Title:** what the actor does at this step, a short verb phrase in Title Case (`Signs In First`, `Taps Start`), Google Sans Flex SemiBold 28, ink. Never the screen's name alone.
     - **Status pill** (optional), under the title: the state the system is in at this step (`Request pending`), Geist Mono 20, `#4A5C40` on a sage tint `rgba(124,143,111,0.20)`, radius 999, padding 4 / 16. Only when the source gives a state.
     - **Touchpoint tag:** on the card's top-right corner, sitting on the top border (half above, half below): the product or system where the step happens (`App`, `CRM`, `Email`), Geist Mono SemiBold 18, white on the touchpoint's colour, radius 6, padding 2 / 14, +6% tracking. One muted colour per touchpoint, the same everywhere in the file: sage `#7C8F6F`, slate `#5E7A9B`, ochre `#B8915A`, clay `#9C6B50`, plum `#6E6479`, grey `#4F5D75`, in that order. Record them in the `Handoff profile`. Leave the tag off when the whole flow happens in one product.
     - **Surface tag** for an overlay step (`🪟 MODAL`, `✉️ EMAIL`, light pill, §4) on the top-left corner, the same way.
@@ -510,7 +510,7 @@ Name each board frame `0# Page type — {Screen name}`.
   - **Terminal:** pill; Start = ink outline, End = ink fill. Only for the no-screen cases above.
 - **Arrows start at the trigger.** Every arrow caused by a user action leaves from the marker of the element that causes it, drawn on the source screen's preview (marker `2` on the `Next` button), not from the node's edge. This includes arrows into a decision (`Next` → "valid?") and return paths (`Back`). Draw the arrow's first segment above the node so it visibly touches the marker. Only arrows out of a decision, or caused by the system, leave from a shape's edge.
 - **Nodes are as big as the screen.** Every step's screen is its master at 100% and the card above it matches its width, so a phone step is ~375 wide and a desktop step ~1280. The board grows to fit (Hug). Plugin API: the screen is its own instance under the card (not nested inside a kit node), so it never needs detaching or resizing.
-- **Arrows:** vector lines, 1.5px stroke `#6B6B6B`, arrow end cap. Main path on one horizontal axis; errors drop straight down from decisions; return paths dashed muted (dash 5, gap 4). Keep arrows on a layer below the nodes.
+- **Arrows:** vector lines, 1.5px stroke `#6B6B6B`, ending in an open line arrowhead (`>`, Figma end cap **Line arrow**), never a filled triangle. Main path on one horizontal axis; errors drop straight down from decisions; return paths dashed muted (dash 5, gap 4). Keep arrows on a layer below the nodes.
 - **Connector rules (from diagram-design; every flow and state board):**
   1. **Orthogonal only, rounded elbows.** Every bend is a right angle with corner radius 8. No diagonals. An arrow leaves and enters a node perpendicular to the edge it touches, at least 8px from a corner, never sliding along a border.
   2. **Labels never touch their arrow.** A visible 6–10px gap between the label frame and the stroke; beside the line on vertical segments.
